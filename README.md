@@ -97,3 +97,86 @@ There are many if statements that verify the attack angle and whether it is high
     VH = dataHigh(:,8);
 
 These lines separate out the aerodynamic values from the data matrix.
+
+Note that the "H" subscript represents the high speed instance of the data with the endplate present.
+
+    dragH = -xH.*sind(aH)+yH.*cosd(aH);
+    liftH = -xH.*cosd(aH)-yH.*sind(aH);
+    PH = -TzH;
+
+These lines use equations (1), (2), and (3) to turn the raw data into a drag force vector, a lift force vector, and a pitching moment vector.
+
+    qinf = VH*1.016*133.3223684; %Pa
+    vinf = (qinf*2/rho0).^(1/2); %m/s
+    v = mean(vinf)
+
+These lines serve as a verification of the mathematical and data-taking processes. They first convert the Baratron voltage from volts to the dynamic pressure in Pascals. Then, using the static density collected by the manometer and that dynamic pressure to find the free-stream velocity of the air. Averaging these values yielded a value of v = 15.8926 m/s for the high speed, plated instance. The average speed noted during this trial was about 15.7 m/s.
+
+    a1 = aH;
+    CL1 = liftH./(qinf*Sp);
+    CD1 = dragH./(qinf*Sp);
+    CM1 = PH./(qinf*Sp*c);
+
+Now, using the free-stream dynamic pressure and geometries of the wing (S being the span of the wing from one tip to the other, c being the chord of the wing from leading edge to trailing edge), these lines normalize the lift, drag, and moment vectors into vectors of coefficients of lift, drag, and moment, respectively.
+
+    uCL1 = sqrt((-cosd(aH)./qinf * uL).^2 + (-sind(aH)./qinf * uL).^2 + ((xH.*cosd(aH)+yH.*sind(aH))./(qinf.*VH) * uV).^2);
+    uCD1 = sqrt((cosd(aH)./qinf * uL).^2 + (-sind(aH)./qinf * uL).^2 + ((xH.*sind(aH)-yH.*cosd(aH))./(qinf.*VH) * uV).^2);
+    uCM1 = sqrt((-1./qinf * uT).^2 + (TzH./(qinf .* VH * c) * uV).^2);
+
+These lines generate an estimated error based on the precision and systematic bias theory of uncertainty. It uses partial derivatives of the detemining equations of each variable multiplied by the uncertainty in the raw measurement of the determining variable to give a systematic bias uncertainty. The precision uncertainty is chosen based on the 95% certainty yielding a factor of 1.96 times the standard deviation of a data set normalized by the root of the number of data in the set. The exact values of the uncertainty are not of concern, but are represented by error bars on the following graphs.
+
+    figure
+    hold on
+    errorbar(a1, CL1, uCL1, 'horizontal')
+    errorbar(a2, CL2, uCL2, 'horizontal')
+    errorbar(a3, CL3, uCL3, 'horizontal')
+    errorbar(a4, CL4, uCL4, 'horizontal')
+    title('C_L for High/Low Speed With/Without End Plate')
+    xlabel('Angle of Attack, \alpha (deg)')
+    ylabel('Coefficient of Lift, C_L')
+    legend('High Speed, Plate','Low Speed, Plate','High Speed, No Plate','Low Speed, No Plate','Location','Northwest','FontSize',6)
+
+These lines graph the coefficients of lift for each of the four scenarios depicted over the angles of attack:
+
+![Lift data](https://github.com/user-attachments/assets/46ce222d-ddcd-4422-9603-4b2b06c22fd9)
+
+Notice the drops in each graph. This is where stalling, the phenomenon where lift is no longer generated due to a wing holding too high of an angle of attack, happens. This gives a pilot a general idea of the safe operating angles of the wing being studied. It is also important to note that the higher speeds stall at higher angles of attack.
+
+    figure
+    hold on
+    errorbar(a1, CD1, uCD1, 'horizontal')
+    errorbar(a2, CD2, uCD2, 'horizontal')
+    errorbar(a3, CD3, uCD3, 'horizontal')
+    errorbar(a4, CD4, uCD4, 'horizontal')
+    title('C_D for High/Low Speed With/Without End Plate')
+    xlabel('Angle of Attack, \alpha (deg)')
+    ylabel('Coefficient of Drag, C_D')
+    legend('High Speed, Plate','Low Speed, Plate','High Speed, No Plate','Low Speed, No Plate','Location','Northwest','FontSize',6)
+
+Similarly, these lines graph the coefficients of drag for each scenario:
+
+![Drag data](https://github.com/user-attachments/assets/c96d360c-2468-4b12-a78f-d19818b59302)
+
+This figure demonstrates that drag increases at stalling at the same time that lift decreases.
+
+    figure
+    hold on
+    errorbar(CD1, CL1, -uCD1, uCD1, -uCL1, uCL1)
+    errorbar(CD2, CL2, -uCD2, uCD2, -uCL2, uCL2)
+    errorbar(CD3, CL3, -uCD3, uCD3, -uCL3, uCL3)
+    errorbar(CD4, CL4, -uCD4, uCD4, -uCL4, uCL4)
+    title('Drag Polar for High/Low Speed With/Without End Plate')
+    xlabel('Coefficient of Drag, C_D')
+    ylabel('Coefficient of Lift, C_L')
+    legend('High Speed, Plate','Low Speed, Plate','High Speed, No Plate','Low Speed, No Plate','Location','Northwest','FontSize',6)
+
+    figure
+    hold on
+    errorbar(a1, CM1, uCM1, 'horizontal')
+    errorbar(a2, CM2, uCM2, 'horizontal')
+    errorbar(a3, CM3, uCM3, 'horizontal')
+    errorbar(a4, CM4, uCM4, 'horizontal')
+    title('C_M for High/Low Speed With/Without End Plate')
+    xlabel('Angle of Attack, \alpha (deg)')
+    ylabel('Coefficient of the Pitching Moment, C_M')
+    legend('High Speed, Plate','Low Speed, Plate','High Speed, No Plate','Low Speed, No Plate','Location','Northwest','FontSize',6)

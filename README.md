@@ -22,7 +22,7 @@ For this experiment:
 * A pitot-static tube on/in the wind tunnel connects to a Baratron device that converts pressure differences into electric signals via capacitors with a conversion rate of 1.016 mmHg/V
 * A FlowKinetics Manometer measures ambient pressure, temperature, and density
 * The load cell measured the data (approximately 100 samples per second) and was sent to a LabView VI to compile the data into a large spreadsheet
-* Data was taken at each whole-degree angle of attack up to 22 deg for the high speed and 20 deg for the low speed
+* Data was taken at each whole-degree angle of attack up to 22° for the high speed and 20° for the low speed
 * This last point was done for both the wing with its end plate and without
 
 ## Results and Discussion
@@ -170,6 +170,12 @@ This figure demonstrates that drag increases at stalling at the same time that l
     ylabel('Coefficient of Lift, C_L')
     legend('High Speed, Plate','Low Speed, Plate','High Speed, No Plate','Low Speed, No Plate','Location','Northwest','FontSize',6)
 
+These lines graph the coefficients of lift versus the corresponding coeffiicents of drag. This type of graph is called the drag polar, as these values against one another tend to make a polar-type graph with heavy curvature. The experiments in particular yielded:
+
+![Drag polar](https://github.com/user-attachments/assets/0ba03ea0-ca1f-4672-a2c8-b528cbefb371)
+
+The biggest point of note out of this graph is that the end plate lines are higher coefficients of lift at each coefficient of drag compared to the lines of no end plate. This demonstrates that the end plate of the wing generates more lift than drag, an important notion for flight.
+
     figure
     hold on
     errorbar(a1, CM1, uCM1, 'horizontal')
@@ -180,3 +186,16 @@ This figure demonstrates that drag increases at stalling at the same time that l
     xlabel('Angle of Attack, \alpha (deg)')
     ylabel('Coefficient of the Pitching Moment, C_M')
     legend('High Speed, Plate','Low Speed, Plate','High Speed, No Plate','Low Speed, No Plate','Location','Northwest','FontSize',6)
+
+Finally, these lines plot the coefficient of the pitching moment against the angle of attack:
+
+![Pitching moment](https://github.com/user-attachments/assets/57ad3403-7152-485c-8e2e-6262e65b2be0)
+
+This graph demonstrates the degree of pitch present at different angles of attack. This is important to be accounted for during flight, and the discovery of this data through testing will allow a pilot during flight to account for such additional moments on the aircraft's wings.
+
+## Conclusion
+Thus, this experiment demonstrated that higher speeds and the presence of a turblence-preventing end plate provides benefits to a wing in the form of additional lift, moreso than the additional drag that also may be induced. This is important if the test wing is to then be used in actual flight, as an idea of wing behavior at particular angles of attack was determined. This behavior was most notable in the stalling that occured at 19.152°, 13.104°, 18.144°, and 12.096° for the high and low speeds with the end plate and the high and low speeds without the end plate, respectively. And, thus, I had successfully analyzed the effects of aerodynamic loads on a wing.
+
+The results of this experiment are found in more detail in the lab report that I submitted for class (posted to this repository). Similarly, the raw MATLAB script is posted in this repository.
+
+**Overall, this experiment was a fantastic exercise. Out of the three laboratories this AE2610 class mandated, aerodynamic loads was above and beyond the most challenging and rewarding. It required me to familiarize myself with proper lab equipment relevant to the aerospace field. Then, I had to obtain data from this equipment and properly analyze it in a coding base like MATLAB. The MATLAB script was easily the longest I had written before, requiring over 2000 lines of code. Granted, there are many improvements that can be made to this code. One could simply loop through half the code a second time with the other excel file and cut out ~800 lines of code. The function would be the same, but it would create a more efficient script. Moreover, there exist ways to avoid excessive conditionals throughout the program like using a boolean check and having the code look for changes in the angles of attack. However, in the creation of this script, I was under a time crunch. Thus, I was not only focused on code efficiency. I instead focused on function first over form. If I was given some time to revise this code, though, I would certainly make it more efficient. All in all, this experiment was a wonderful chance to hone my class skills and learn a lot about the field of aerospace engineering, particularly regarding laboratory research.**
